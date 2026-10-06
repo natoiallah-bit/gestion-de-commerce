@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Synchronisable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Remboursement extends Model
 {
-    protected $fillable = ['client_id', 'user_id', 'montant', 'mode_paiement', 'note'];
+    use Synchronisable;
+
+    protected $fillable = [
+        'uuid', 'client_id', 'user_id', 'montant', 'mode_paiement', 'note'];
 
     public function client(): BelongsTo
     {

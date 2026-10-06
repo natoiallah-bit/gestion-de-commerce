@@ -2,23 +2,28 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Synchronisable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class Vente extends Model
 {
+    use Synchronisable;
+
     public const MODES = [
         'especes' => 'Espèces',
         'mobile_money' => 'Mobile money',
     ];
 
     protected $fillable = [
+        'uuid',
         'numero', 'client_id', 'user_id', 'total', 'montant_paye', 'mode_paiement',
-        'statut', 'annulee_par', 'annulee_le', 'motif_annulation',
+        'statut', 'annulee_par', 'annulee_le', 'motif_annulation', 'appareil_id',
     ];
 
     protected function casts(): array
@@ -129,6 +134,68 @@ class Vente extends Model
                     'total' => $produit->prix_vente * $quantite,
                 ]);
                 $produit->mouvementer(-$quantite, 'vente', $userId, ['vente_id' => $vente->id]);
+            }
+
+            return $vente;
+        });
+    }
+
+    /**
+     * Vente faite sur un appareil, peut-être hors ligne, reçue lors d'une synchronisation.
+     *
+     * Contrairement à la caisse en ligne, la vente a déjà eu lieu : on l'enregistre avec
+     * les prix affichés sur l'appareil, même si le stock du serveur passe en négatif.
+     * Renvoyer la même vente (même uuid) ne la compte pas deux fois.
+     */
+    public static function importer(array $donnees, Appareil $appareil, User $user): self
+    {
+        if ($existante = self::parUuid($donnees['uuid'])) {
+            return $existante;
+        }
+
+        return DB::transaction(function () use ($donnees, $appareil, $user) {
+            $produits = Produit::whereIn('uuid', array_column($donnees['lignes'], 'produit_uuid'))
+                ->lockForUpdate()->get()->keyBy('uuid');
+
+            $total = 0;
+            foreach ($donnees['lignes'] as $ligne) {
+                if (! $produits->has($ligne['produit_uuid'])) {
+                    throw ValidationException::withMessages(['lignes' => 'Produit inconnu du serveur.']);
+                }
+                $total += (int) $ligne['quantite'] * (int) $ligne['prix_unitaire'];
+            }
+
+            $date = isset($donnees['created_at']) ? Carbon::parse($donnees['created_at'])->setTimezone(config('app.timezone')) : now();
+            $numero = $donnees['numero'] ?? $appareil->code.'-'.substr($donnees['uuid'], 0, 8);
+            if (self::where('numero', $numero)->exists()) {
+                $numero .= '-'.substr($donnees['uuid'], 0, 4);
+            }
+
+            $vente = new self([
+                'uuid' => $donnees['uuid'],
+                'numero' => $numero,
+                'client_id' => Client::parUuid($donnees['client_uuid'] ?? null)?->id,
+                'user_id' => $user->id,
+                'appareil_id' => $appareil->id,
+                'total' => $total,
+                'montant_paye' => min(max((int) $donnees['montant_paye'], 0), $total),
+                'mode_paiement' => array_key_exists($donnees['mode_paiement'] ?? '', self::MODES) ? $donnees['mode_paiement'] : 'especes',
+            ]);
+            $vente->created_at = $date->isFuture() ? now() : $date;
+            $vente->save();
+
+            foreach ($donnees['lignes'] as $ligne) {
+                $produit = $produits[$ligne['produit_uuid']];
+                $vente->lignes()->create([
+                    'uuid' => $ligne['uuid'] ?? null,
+                    'produit_id' => $produit->id,
+                    'designation' => $ligne['designation'] ?? $produit->nom,
+                    'quantite' => (int) $ligne['quantite'],
+                    'prix_unitaire' => (int) $ligne['prix_unitaire'],
+                    'prix_achat_unitaire' => $produit->prix_achat,
+                    'total' => (int) $ligne['quantite'] * (int) $ligne['prix_unitaire'],
+                ]);
+                $produit->mouvementer(-(int) $ligne['quantite'], 'vente', $user->id, ['vente_id' => $vente->id]);
             }
 
             return $vente;

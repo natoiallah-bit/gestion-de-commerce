@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Synchronisable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class Client extends Model
 {
-    protected $fillable = ['nom', 'telephone', 'adresse'];
+    use Synchronisable;
+
+    protected $fillable = [
+        'uuid', 'nom', 'telephone', 'adresse'];
 
     public function ventes(): HasMany
     {

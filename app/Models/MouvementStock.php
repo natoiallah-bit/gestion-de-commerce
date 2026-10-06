@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Synchronisable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MouvementStock extends Model
 {
+    use Synchronisable;
+
     protected $table = 'mouvements_stock';
 
     public const TYPES = [
@@ -17,6 +20,7 @@ class MouvementStock extends Model
     ];
 
     protected $fillable = [
+        'uuid',
         'produit_id', 'type', 'quantite', 'stock_apres', 'prix_achat_unitaire',
         'fournisseur_id', 'vente_id', 'user_id', 'note',
     ];

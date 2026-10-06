@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Synchronisable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,9 +11,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Produit extends Model
 {
-    use HasFactory;
+    use HasFactory, Synchronisable;
 
     protected $fillable = [
+        'uuid',
         'nom', 'code', 'categorie_id', 'unite', 'prix_achat', 'prix_vente', 'seuil_alerte', 'actif',
     ];
 
