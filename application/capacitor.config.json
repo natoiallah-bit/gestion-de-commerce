@@ -1,0 +1,12 @@
+{
+  "appId": "com.gestioncommerce.app",
+  "appName": "Gestion Commerce",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

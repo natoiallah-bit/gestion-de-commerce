@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppareilController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\CategorieController;
@@ -57,6 +58,8 @@ Route::middleware(['auth', 'actif'])->group(function () {
         Route::get('/rapports', [RapportController::class, 'index'])->name('rapports.index');
 
         Route::resource('users', UserController::class)->except(['show', 'destroy']);
+        Route::get('/appareils', [AppareilController::class, 'index'])->name('appareils.index');
+        Route::post('/appareils/{appareil}/revoquer', [AppareilController::class, 'revoquer'])->name('appareils.revoquer');
         Route::get('/parametres', [ParametreController::class, 'edit'])->name('parametres.edit');
         Route::put('/parametres', [ParametreController::class, 'update'])->name('parametres.update');
     });

@@ -1,7 +1,45 @@
 # Gestion de commerce
 
-Application web de gestion pour petits commerces (boutique, alimentation, quincaillerie…),
-en français, montants en FCFA, utilisable sur ordinateur, tablette et téléphone.
+Gestion pour petits commerces (boutique, alimentation, quincaillerie…), en français, montants en FCFA.
+
+Trois parties :
+
+| Partie | Où | Rôle |
+|---|---|---|
+| **Serveur** (Laravel, ce dossier) | hébergé en ligne | site web du gérant + API de synchronisation |
+| **Application Android** (`GestionCommerce.apk`) | téléphones | caisse **hors ligne**, se synchronise dès qu'il y a internet |
+| **Application Windows** (`GestionCommerce-Installation-….exe`) | ordinateurs | même application, installée sur le PC |
+
+Les applications Android et Windows sont construites à partir du dossier [`application/`](application/).
+
+## Télécharger les applications
+
+Onglet **Releases** du dépôt GitHub → dernière version → télécharger :
+- `GestionCommerce.apk` sur le téléphone, puis l'ouvrir (autoriser « installer des applications inconnues » si demandé) ;
+- `GestionCommerce-Installation-….exe` sur l'ordinateur Windows, puis le lancer.
+
+Au premier lancement : adresse du serveur, e-mail et mot de passe (comptes créés par le gérant
+sur le site web, menu Utilisateurs). Ensuite l'application fonctionne **sans internet**.
+
+### Comment marche la synchronisation
+
+- Chaque vente, client, remboursement, produit, entrée de stock ou dépense est enregistré d'abord
+  **dans l'appareil**, puis envoyé au serveur dès que la connexion est là (au démarrage, toutes les
+  minutes, quelques secondes après une vente, ou avec le bouton « Synchroniser »).
+- L'appareil reçoit en retour ce que les autres appareils et le site web ont fait.
+- Une coupure pendant l'envoi ne crée jamais de doublon (chaque opération a un identifiant unique).
+- Les tickets sont numérotés par appareil (`A1-000012`, `A2-000003`…) pour ne jamais se mélanger.
+- Si deux téléphones vendent hors ligne le dernier article, les deux ventes sont gardées et le stock
+  passe en négatif : le gérant le voit et corrige par un ajustement.
+- Le gérant voit tous les appareils (menu **Appareils**) et peut déconnecter un téléphone perdu.
+
+### Héberger le serveur
+
+N'importe quel hébergement PHP 8.3 avec MySQL ou SQLite convient. Utilisez une adresse **https**
+(certificat gratuit Let's Encrypt chez la plupart des hébergeurs) : c'est elle que l'on saisit
+dans les applications.
+
+## Fonctionnalités
 
 ## Fonctionnalités
 
@@ -50,5 +88,19 @@ php artisan db:seed --class=DemoSeeder
 ## Tests
 
 ```bash
-php artisan test
+php artisan test                 # serveur
+cd application && npm test       # logique hors ligne de l'application
 ```
+
+## Développer l'application
+
+```bash
+cd application
+npm install
+npm run dev        # dans le navigateur
+npm run exe        # installateur Windows (sur Windows)
+npm run android    # puis ouvrir application/android dans Android Studio
+```
+
+GitHub Actions construit automatiquement l'APK et l'EXE à chaque modification du dossier
+`application/`. Pour publier une version : créer un tag `v1.0.1` (les fichiers apparaissent dans Releases).

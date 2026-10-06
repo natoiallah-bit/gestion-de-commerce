@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 // Un téléphone ou un ordinateur où l'application est installée
 class Appareil extends Model
@@ -18,6 +19,11 @@ class Appareil extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function ventes(): HasMany
+    {
+        return $this->hasMany(Vente::class);
     }
 
     public static function enregistrer(string $uuid, string $nom, User $user): self

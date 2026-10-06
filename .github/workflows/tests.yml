@@ -2,6 +2,7 @@ name: Tests
 
 on:
   push:
+    paths-ignore: ['application/**']
   pull_request:
 
 jobs:

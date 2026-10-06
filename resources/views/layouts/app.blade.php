@@ -145,6 +145,7 @@
 
             <div class="menu-label">Administration</div>
             {!! $lien('users.index', 'Utilisateurs', 'users.*') !!}
+            {!! $lien('appareils.index', 'Appareils') !!}
             {!! $lien('parametres.edit', 'Paramètres') !!}
         @endif
 

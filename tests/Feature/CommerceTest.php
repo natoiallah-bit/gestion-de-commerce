@@ -170,7 +170,7 @@ class CommerceTest extends TestCase
             route('clients.index'), route('clients.create'), route('clients.show', $client), route('clients.edit', $client),
             route('produits.index'), route('produits.create'), route('produits.show', $produit), route('produits.edit', $produit),
             route('stock.entree'), route('stock.mouvements'), route('categories.index'), route('fournisseurs.index'), route('fournisseurs.create'),
-            route('depenses.index'), route('rapports.index'), route('users.index'), route('users.create'), route('parametres.edit'),
+            route('depenses.index'), route('rapports.index'), route('users.index'), route('users.create'), route('parametres.edit'), route('appareils.index'),
         ];
         foreach ($pages as $url) {
             $this->actingAs($gerant)->get($url)->assertOk();

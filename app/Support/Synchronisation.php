@@ -234,6 +234,7 @@ class Synchronisation
             'prix_achat_unitaire' => 'nullable|integer|min:0',
             'fournisseur_uuid' => 'nullable|uuid',
             'note' => 'nullable|string|max:255',
+            'maj_prix' => 'nullable|boolean',
             'created_at' => 'nullable|date',
         ]);
         if (MouvementStock::where('uuid', $valide['uuid'])->exists()) {
@@ -242,7 +243,7 @@ class Synchronisation
 
         DB::transaction(function () use ($valide) {
             $produit = Produit::where('uuid', $valide['produit_uuid'])->lockForUpdate()->firstOrFail();
-            if ($valide['type'] === 'entree' && isset($valide['prix_achat_unitaire'])) {
+            if ($valide['type'] === 'entree' && isset($valide['prix_achat_unitaire']) && ($valide['maj_prix'] ?? true)) {
                 $produit->prix_achat = $valide['prix_achat_unitaire'];
             }
             $produit->mouvementer((int) $valide['quantite'], $valide['type'], $this->user->id, [
