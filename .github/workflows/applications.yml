@@ -1,8 +1,9 @@
 name: Applications Android et Windows
 
 # Fabrique l'application téléphone (.apk) et l'installateur Windows (.exe).
-# - à chaque envoi sur main : fichiers téléchargeables dans l'onglet Actions
-# - pour une version (tag v1.0.0, v1.1.0…) : fichiers publiés dans « Releases »
+# Les fichiers sont publiés dans « Releases » sous le numéro de version de
+# application/package.json (v1.0.0…) : changer ce numéro crée une nouvelle version,
+# sinon la version existante est mise à jour.
 
 on:
   push:
@@ -86,16 +87,22 @@ jobs:
           path: application/dist-electron/*.exe
 
   publication:
-    if: startsWith(github.ref, 'refs/tags/v')
     needs: [android, windows]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - id: version
+        run: echo "tag=v$(node -p "require('./application/package.json').version")" >> "$GITHUB_OUTPUT"
       - uses: actions/download-artifact@v4
         with:
           path: fichiers
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Gestion Commerce ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          make_latest: true
           files: fichiers/*
           body: |
             **Téléphone Android** : téléchargez `GestionCommerce.apk` sur le téléphone et ouvrez-le

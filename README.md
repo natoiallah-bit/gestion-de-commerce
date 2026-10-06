@@ -103,4 +103,5 @@ npm run android    # puis ouvrir application/android dans Android Studio
 ```
 
 GitHub Actions construit automatiquement l'APK et l'EXE à chaque modification du dossier
-`application/`. Pour publier une version : créer un tag `v1.0.1` (les fichiers apparaissent dans Releases).
+`application/` et les publie dans Releases sous le numéro de version de `application/package.json`
+(augmenter ce numéro, par exemple 1.0.1, pour publier une nouvelle version).
