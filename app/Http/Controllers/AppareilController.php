@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appareil;
+use App\Support\AdresseReseau;
 use Laravel\Sanctum\PersonalAccessToken;
 
 class AppareilController extends Controller
@@ -13,7 +14,9 @@ class AppareilController extends Controller
         $connectes = PersonalAccessToken::where('name', 'like', 'appareil:%')->pluck('name')
             ->map(fn ($n) => substr($n, strlen('appareil:')))->flip();
 
-        return view('appareils.index', compact('appareils', 'connectes'));
+        $adresses = AdresseReseau::urls(request()->getPort() ?: 8000);
+
+        return view('appareils.index', compact('appareils', 'connectes', 'adresses'));
     }
 
     // Téléphone perdu ou employé parti : l'appareil devra se reconnecter

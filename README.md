@@ -12,13 +12,41 @@ Trois parties :
 
 Les applications Android et Windows sont construites à partir du dossier [`application/`](application/).
 
+## Utiliser en local (sur l'ordinateur de la boutique)
+
+Comme pour la gestion scolaire : le serveur tourne sur un ordinateur de la boutique, avec SQLite.
+Les téléphones s'y connectent par le **Wi-Fi de la boutique** (pas besoin d'internet).
+
+Prérequis : PHP 8.3+ et Composer (déjà installés pour la gestion scolaire), et Git.
+
+1. Récupérer le projet : `git clone https://github.com/natoiallah-bit/gestion-de-commerce.git`
+2. Double-cliquer sur **`installer.bat`** (une seule fois).
+3. Double-cliquer sur **`demarrer.bat`** : le site s'ouvre dans le navigateur et la fenêtre affiche
+   l'adresse à taper dans les téléphones, par exemple `192.168.1.20:8000`.
+   **Laisser cette fenêtre ouverte** pendant que la boutique travaille.
+4. Au premier lancement, Windows demande d'autoriser PHP : cocher **Réseaux privés** et autoriser.
+5. Pour une nouvelle version : **`mettre-a-jour.bat`**, puis `demarrer.bat`.
+
+L'adresse est aussi affichée sur le site, menu **Appareils**. Sur Linux / Mac : `./installer.sh` puis `./demarrer.sh`.
+
+Bon à savoir :
+- Les téléphones vendent même quand l'ordinateur est éteint ou hors de portée ; tout se
+  synchronise quand ils retrouvent le Wi-Fi de la boutique avec l'ordinateur allumé.
+- Si l'adresse de l'ordinateur change (box redémarrée), la nouvelle s'affiche dans `demarrer.bat` :
+  la retaper dans l'application (écran Synchro → Se déconnecter, puis se reconnecter ; rien n'est perdu).
+  Pour l'éviter, réserver une adresse fixe à l'ordinateur dans les réglages de la box.
+- Toutes les données sont dans `database/database.sqlite` : **copiez ce fichier régulièrement**
+  sur une clé USB (sauvegarde).
+- Plus tard, le même projet pourra être mis chez un hébergeur sans rien changer aux applications :
+  il suffira de taper la nouvelle adresse.
+
 ## Télécharger les applications
 
 Onglet **Releases** du dépôt GitHub → dernière version → télécharger :
 - `GestionCommerce.apk` sur le téléphone, puis l'ouvrir (autoriser « installer des applications inconnues » si demandé) ;
 - `GestionCommerce-Installation-….exe` sur l'ordinateur Windows, puis le lancer.
 
-Au premier lancement : adresse du serveur, e-mail et mot de passe (comptes créés par le gérant
+Au premier lancement : adresse du serveur (celle affichée par `demarrer.bat`), e-mail et mot de passe (comptes créés par le gérant
 sur le site web, menu Utilisateurs). Ensuite l'application fonctionne **sans internet**.
 
 ### Comment marche la synchronisation

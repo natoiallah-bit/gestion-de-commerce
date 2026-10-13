@@ -3,7 +3,24 @@
 
 @section('content')
 <h1>Appareils connectés</h1>
-<p class="aide" style="margin-bottom:14px">Téléphones et ordinateurs où l'application est installée. Ils travaillent hors ligne et se synchronisent dès qu'ils ont internet.</p>
+<p class="aide" style="margin-bottom:14px">Téléphones et ordinateurs où l'application est installée. Ils travaillent hors ligne et se synchronisent dès qu'ils joignent le serveur.</p>
+
+<div class="carte">
+    <h2>Adresse du serveur à taper dans les applications</h2>
+    @php $ici = request()->getSchemeAndHttpHost(); @endphp
+    @if(! str_contains($ici, '127.0.0.1') && ! str_contains($ici, 'localhost'))
+        <p style="font-size:18px"><b>{{ $ici }}</b></p>
+    @elseif($adresses)
+        <p>Téléphones connectés au <b>même Wi-Fi</b> que cet ordinateur :</p>
+        @foreach($adresses as $adresse)
+            <p style="font-size:18px; margin-top:4px"><b>{{ $adresse }}</b></p>
+        @endforeach
+        <p class="aide" style="margin-top:6px">Application Windows sur cet ordinateur : <b>http://127.0.0.1:{{ request()->getPort() }}</b>.
+            Si un téléphone n'arrive pas à se connecter : même Wi-Fi, données mobiles coupées, et PHP autorisé dans le pare-feu Windows (réseaux privés).</p>
+    @else
+        <p class="negatif">Cet ordinateur n'est connecté à aucun réseau : branchez-le au Wi-Fi de la boutique pour que les téléphones le trouvent.</p>
+    @endif
+</div>
 
 <div class="carte tableau">
     <table>

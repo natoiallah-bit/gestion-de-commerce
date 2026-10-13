@@ -1,7 +1,7 @@
 {
   "name": "gestion-commerce-app",
   "productName": "Gestion Commerce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Application de caisse hors ligne, synchronisée avec le serveur Gestion de commerce",
   "private": true,
   "type": "module",
