@@ -15,19 +15,35 @@ Les applications Android et Windows sont construites à partir du dossier [`appl
 ## Utiliser en local (sur l'ordinateur de la boutique)
 
 Comme pour la gestion scolaire : le serveur tourne sur un ordinateur de la boutique, avec SQLite.
-Les téléphones s'y connectent par le **Wi-Fi de la boutique** (pas besoin d'internet).
+Les téléphones s'y connectent par le **Wi-Fi de la boutique** (pas besoin d'internet, sauf pour l'installation).
 
-Prérequis : PHP 8.3+ et Composer (déjà installés pour la gestion scolaire), et Git.
+Prérequis : **PHP 8.3 ou plus** (celui de la gestion scolaire convient ; Laragon et XAMPP sont trouvés automatiquement).
+Composer est téléchargé tout seul s'il n'est pas installé.
 
-1. Récupérer le projet : `git clone https://github.com/natoiallah-bit/gestion-de-commerce.git`
-2. Double-cliquer sur **`installer.bat`** (une seule fois).
-3. Double-cliquer sur **`demarrer.bat`** : le site s'ouvre dans le navigateur et la fenêtre affiche
-   l'adresse à taper dans les téléphones, par exemple `192.168.1.20:8000`.
+1. Récupérer le projet, au choix :
+   - sur GitHub : bouton vert **Code → Download ZIP**, puis **clic droit sur le ZIP → Extraire tout** ;
+   - ou avec Git : `git clone https://github.com/natoiallah-bit/gestion-de-commerce.git`
+2. Dans le dossier extrait, double-cliquer sur **`installer.bat`** (une seule fois, avec internet).
+3. Double-cliquer sur **`demarrer.bat`** : le site s'ouvre sur `http://127.0.0.1:8100` et la fenêtre affiche
+   l'adresse à taper dans les téléphones, par exemple `192.168.1.20:8100`.
    **Laisser cette fenêtre ouverte** pendant que la boutique travaille.
 4. Au premier lancement, Windows demande d'autoriser PHP : cocher **Réseaux privés** et autoriser.
 5. Pour une nouvelle version : **`mettre-a-jour.bat`**, puis `demarrer.bat`.
 
+Le port **8100** est différent de celui de la gestion scolaire (8000) : les deux peuvent tourner en même temps.
 L'adresse est aussi affichée sur le site, menu **Appareils**. Sur Linux / Mac : `./installer.sh` puis `./demarrer.sh`.
+
+### Si l'installation ne marche pas
+
+`installer.bat` explique le problème en clair et l'écrit dans le fichier **`installation.log`**. Les cas courants :
+
+| Message | Solution |
+|---|---|
+| PHP est introuvable | Installer PHP 8.3+ (ou Laragon), ou ajouter le dossier de PHP au PATH de Windows |
+| PHP … est trop ancien | Installer PHP 8.3 ou plus récent |
+| extensions PHP désactivées | Ouvrir le `php.ini` indiqué, enlever le `;` devant les lignes `extension=…` citées, enregistrer |
+| fichiers du projet incomplets | Extraire le ZIP (clic droit → Extraire tout) avant de lancer `installer.bat` |
+| impossible de télécharger Composer | Vérifier internet, ou installer Composer depuis getcomposer.org |
 
 Bon à savoir :
 - Les téléphones vendent même quand l'ordinateur est éteint ou hors de portée ; tout se

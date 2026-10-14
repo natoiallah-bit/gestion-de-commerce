@@ -4,7 +4,7 @@ namespace App\Support;
 
 /**
  * Adresses de cet ordinateur sur le réseau local (Wi-Fi / câble).
- * C'est l'une d'elles qu'on tape dans l'application du téléphone : http://192.168.1.20:8000
+ * C'est l'une d'elles qu'on tape dans l'application du téléphone : http://192.168.1.20:8100
  */
 class AdresseReseau
 {
@@ -28,7 +28,7 @@ class AdresseReseau
     }
 
     /** @return list<string> */
-    public static function urls(int $port = 8000): array
+    public static function urls(int $port = 8100): array
     {
         return array_map(fn ($ip) => "http://{$ip}:{$port}", self::ips());
     }

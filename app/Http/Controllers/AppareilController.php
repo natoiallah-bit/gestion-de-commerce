@@ -14,7 +14,7 @@ class AppareilController extends Controller
         $connectes = PersonalAccessToken::where('name', 'like', 'appareil:%')->pluck('name')
             ->map(fn ($n) => substr($n, strlen('appareil:')))->flip();
 
-        $adresses = AdresseReseau::urls(request()->getPort() ?: 8000);
+        $adresses = AdresseReseau::urls(request()->getPort() ?: 8100);
 
         return view('appareils.index', compact('appareils', 'connectes', 'adresses'));
     }

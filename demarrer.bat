@@ -1,22 +1,16 @@
 @echo off
-chcp 65001 >nul
 cd /d "%~dp0"
 title Gestion Commerce - serveur (laisser ouvert)
-
-if not exist .env (
-    echo Lancez d'abord installer.bat
-    pause
-    exit /b 1
-)
-
-rem Applique les mises a jour de la base apres une nouvelle version
-php artisan migrate --force >nul
-
-php artisan commerce:adresses
+call "%~dp0outils\trouver-php.bat"
+if not defined PHP (echo PHP est introuvable sur cet ordinateur. & pause & exit /b 1)
+if not exist vendor\autoload.php (echo Lancez d'abord installer.bat & pause & exit /b 1)
+"%PHP%" artisan migrate --force
+"%PHP%" artisan commerce:adresses --port=8100
 echo  Laissez cette fenetre ouverte pendant que la boutique travaille.
-echo  Si Windows demande l'autorisation pour PHP, cochez "Reseaux prives" et autorisez.
+echo  Si Windows demande l'autorisation pour PHP : cochez "Reseaux prives" puis Autoriser.
 echo.
-
-start "" http://127.0.0.1:8000
-php artisan serve --host=0.0.0.0 --port=8000
+start "" http://127.0.0.1:8100
+"%PHP%" artisan serve --host=0.0.0.0 --port=8100
+echo.
+echo Le serveur s'est arrete (voir le message ci-dessus).
 pause

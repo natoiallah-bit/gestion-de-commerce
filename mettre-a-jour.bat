@@ -1,21 +1,9 @@
 @echo off
-chcp 65001 >nul
 cd /d "%~dp0"
 title Mise a jour - Gestion Commerce
-
-echo Recuperation de la derniere version...
-git pull
-if errorlevel 1 goto erreur
-call composer install --no-interaction
-if errorlevel 1 goto erreur
-php artisan migrate --force
-if errorlevel 1 goto erreur
+call "%~dp0outils\trouver-php.bat"
+if not defined PHP (echo PHP est introuvable sur cet ordinateur. & pause & exit /b 1)
+if exist .git (git pull) else (echo Projet telecharge en ZIP : retelechargez le nouveau ZIP et copiez-y votre fichier database\database.sqlite)
+"%PHP%" outils\installer.php
 echo.
-echo Mise a jour terminee. Relancez demarrer.bat
 pause
-exit /b 0
-
-:erreur
-echo La mise a jour a echoue : lisez le message ci-dessus.
-pause
-exit /b 1

@@ -4,7 +4,7 @@ use App\Support\AdresseReseau;
 use Illuminate\Support\Facades\Artisan;
 
 // Affiche l'adresse à taper dans les applications (téléphone, ordinateur)
-Artisan::command('commerce:adresses {--port=8000}', function () {
+Artisan::command('commerce:adresses {--port=8100}', function () {
     $port = (int) $this->option('port');
     $urls = AdresseReseau::urls($port);
 
