@@ -36,7 +36,7 @@ export function Connexion({ onConnecte }) {
   return (
     <div style="min-height:100vh; display:flex; align-items:center; justify-content:center; background:var(--vert-950); padding:16px">
       <form class="carte" style="width:100%; max-width:390px; padding:28px" onSubmit={valider}>
-        <h1 style="text-align:center; margin-bottom:4px">Gestion Commerce</h1>
+        <h1 style="text-align:center; margin-bottom:4px">AlgoCommerce</h1>
         <p class="aide" style="text-align:center; margin-bottom:12px">Connectez cet appareil à votre boutique. Le serveur doit être joignable cette première fois ; ensuite l'application marche aussi sans connexion.</p>
         {erreur && <div class="alerte alerte-erreur">{erreur}</div>}
         <label>Adresse du serveur</label>

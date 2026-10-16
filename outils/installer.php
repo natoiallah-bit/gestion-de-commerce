@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Installation et mise à jour de Gestion Commerce (appelé par installer.bat / installer.sh).
+ * Installation et mise à jour de AlgoCommerce (appelé par installer.bat / installer.sh).
  * Chaque étape explique quoi faire si elle échoue. Tout est aussi écrit dans installation.log.
  */
 chdir(dirname(__DIR__));
@@ -33,7 +33,7 @@ function lancer(string $commande): bool
 
 $php = escapeshellarg(PHP_BINARY);
 
-dire('=== Installation de Gestion Commerce ===');
+dire('=== Installation de AlgoCommerce ===');
 dire('Dossier : '.getcwd());
 dire('PHP     : '.PHP_BINARY.' (version '.PHP_VERSION.')');
 dire('php.ini : '.(php_ini_loaded_file() ?: 'aucun'));

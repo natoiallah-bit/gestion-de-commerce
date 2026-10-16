@@ -1,4 +1,6 @@
-# Gestion de commerce
+# AlgoCommerce — gestion de commerce
+
+*Une solution Algorithme Service Digital.*
 
 Gestion pour petits commerces (boutique, alimentation, quincaillerie…), en français, montants en FCFA.
 
@@ -7,8 +9,8 @@ Trois parties :
 | Partie | Où | Rôle |
 |---|---|---|
 | **Serveur** (Laravel, ce dossier) | hébergé en ligne | site web du gérant + API de synchronisation |
-| **Application Android** (`GestionCommerce.apk`) | téléphones | caisse **hors ligne**, se synchronise dès qu'il y a internet |
-| **Application Windows** (`GestionCommerce-Installation-….exe`) | ordinateurs | même application, installée sur le PC |
+| **Application Android** (`AlgoCommerce.apk`) | téléphones | caisse **hors ligne**, se synchronise dès qu'il y a internet |
+| **Application Windows** (`AlgoCommerce-Installation-….exe`) | ordinateurs | même application, installée sur le PC |
 
 Les applications Android et Windows sont construites à partir du dossier [`application/`](application/).
 
@@ -59,8 +61,8 @@ Bon à savoir :
 ## Télécharger les applications
 
 Onglet **Releases** du dépôt GitHub → dernière version → télécharger :
-- `GestionCommerce.apk` sur le téléphone, puis l'ouvrir (autoriser « installer des applications inconnues » si demandé) ;
-- `GestionCommerce-Installation-….exe` sur l'ordinateur Windows, puis le lancer.
+- `AlgoCommerce.apk` sur le téléphone, puis l'ouvrir (autoriser « installer des applications inconnues » si demandé) ;
+- `AlgoCommerce-Installation-….exe` sur l'ordinateur Windows, puis le lancer.
 
 Au premier lancement : adresse du serveur (celle affichée par `demarrer.bat`), e-mail et mot de passe (comptes créés par le gérant
 sur le site web, menu Utilisateurs). Ensuite l'application fonctionne **sans internet**.

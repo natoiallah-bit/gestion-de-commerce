@@ -42,6 +42,6 @@ export async function appeler(serveur, chemin, corps, jeton, delai = 30000) {
     throw new Error(erreurs.filter(Boolean).join(' ') || 'Données refusées.');
   }
   if (!reponse.ok) throw new Error(donnees?.message || `Erreur du serveur (${reponse.status}).`);
-  if (donnees === null) throw new Error("Cette adresse ne répond pas comme un serveur Gestion de commerce.");
+  if (donnees === null) throw new Error("Cette adresse ne répond pas comme un serveur AlgoCommerce.");
   return donnees;
 }

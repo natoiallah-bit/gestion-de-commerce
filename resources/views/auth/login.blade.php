@@ -21,7 +21,7 @@
 <body>
     <div class="carte">
         <h1>{{ $boutiqueNom }}</h1>
-        <div class="sous">Connexion à la gestion du commerce</div>
+        <div class="sous">AlgoCommerce — gestion de commerce</div>
 
         @if ($errors->any())
             <div class="erreur">{{ $errors->first() }}</div>

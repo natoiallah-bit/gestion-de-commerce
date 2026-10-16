@@ -60,11 +60,11 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug --no-daemon
-          cp app/build/outputs/apk/debug/app-debug.apk ../GestionCommerce.apk
+          cp app/build/outputs/apk/debug/app-debug.apk ../AlgoCommerce.apk
       - uses: actions/upload-artifact@v4
         with:
           name: android
-          path: application/GestionCommerce.apk
+          path: application/AlgoCommerce.apk
 
   windows:
     needs: tests
@@ -100,14 +100,14 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
-          name: Gestion Commerce ${{ steps.version.outputs.tag }}
+          name: AlgoCommerce ${{ steps.version.outputs.tag }}
           target_commitish: ${{ github.sha }}
           make_latest: true
           files: fichiers/*
           body: |
-            **Téléphone Android** : téléchargez `GestionCommerce.apk` sur le téléphone et ouvrez-le
+            **Téléphone Android** : téléchargez `AlgoCommerce.apk` sur le téléphone et ouvrez-le
             (autorisez « installer des applications inconnues » si Android le demande).
 
-            **Ordinateur Windows** : téléchargez `GestionCommerce-Installation-….exe` et lancez-le.
+            **Ordinateur Windows** : téléchargez `AlgoCommerce-Installation-….exe` et lancez-le.
 
             Au premier lancement, indiquez l'adresse de votre serveur, votre e-mail et votre mot de passe.

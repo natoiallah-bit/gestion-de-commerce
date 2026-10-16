@@ -121,7 +121,7 @@
     <nav class="sidebar" onclick="if(event.target===this) this.classList.remove('ouvert')">
         <div class="marque">
             <div class="nom">{{ $boutiqueNom }}</div>
-            <div class="sous">Gestion de commerce</div>
+            <div class="sous">AlgoCommerce</div>
         </div>
 
         @if($u->estGerant())

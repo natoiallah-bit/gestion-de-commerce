@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0"
-title Gestion Commerce - serveur (laisser ouvert)
+title AlgoCommerce - serveur (laisser ouvert)
 call "%~dp0outils\trouver-php.bat"
 if not defined PHP (echo PHP est introuvable sur cet ordinateur. & pause & exit /b 1)
 if not exist vendor\autoload.php (echo Lancez d'abord installer.bat & pause & exit /b 1)

@@ -7,7 +7,7 @@ function creerFenetre() {
     width: 1280,
     height: 820,
     minWidth: 360,
-    title: 'Gestion Commerce',
+    title: 'AlgoCommerce',
     icon: path.join(__dirname, '..', 'public', 'icone.png'),
     autoHideMenuBar: true,
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true },

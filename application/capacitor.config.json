@@ -1,6 +1,6 @@
 {
   "appId": "com.gestioncommerce.app",
-  "appName": "Gestion Commerce",
+  "appName": "AlgoCommerce",
   "webDir": "dist",
   "server": {
     "androidScheme": "http",

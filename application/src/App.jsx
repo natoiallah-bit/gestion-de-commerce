@@ -78,7 +78,7 @@ export function App() {
     <Contexte.Provider value={{ session, naviguer, recharger, gerant }}>
       <div class="app">
         <nav class="menu">
-          <div class="marque"><NomBoutique /><span>Gestion de commerce</span></div>
+          <div class="marque"><NomBoutique /><span>AlgoCommerce</span></div>
           {menu.map((m) => (
             <button key={m.ecran} class={'lien' + (actif(m) ? ' actif' : '')} onClick={() => naviguer(m.ecran)}>
               <span class="ico">{m.ico}</span>{m.texte}

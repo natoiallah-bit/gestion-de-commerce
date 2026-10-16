@@ -1,12 +1,12 @@
 {
   "name": "gestion-commerce-app",
   "productName": "Gestion Commerce",
-  "version": "1.0.1",
-  "description": "Application de caisse hors ligne, synchronisée avec le serveur Gestion de commerce",
+  "version": "1.0.2",
+  "description": "AlgoCommerce : caisse hors ligne synchronisée — Algorithme Service Digital",
   "private": true,
   "type": "module",
   "main": "electron/main.cjs",
-  "author": "Gestion Commerce",
+  "author": "Algorithme Service Digital",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -34,8 +34,8 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "Gestion Commerce",
-      "artifactName": "GestionCommerce-Installation-${version}.${ext}"
+      "shortcutName": "AlgoCommerce",
+      "artifactName": "AlgoCommerce-Installation-${version}.${ext}"
     }
   },
   "dependencies": {
