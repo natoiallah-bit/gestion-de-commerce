@@ -81,6 +81,9 @@ sur le site web, menu Utilisateurs). Ensuite l'application fonctionne **sans int
 
 ### Héberger le serveur
 
+**Guide pas à pas, gratuit (Oracle Cloud + DuckDNS) : [docs/HEBERGEMENT.md](docs/HEBERGEMENT.md).**
+Le script `outils/installer-serveur.sh` installe tout en une commande sur Ubuntu.
+
 N'importe quel hébergement PHP 8.3 avec MySQL ou SQLite convient. Utilisez une adresse **https**
 (certificat gratuit Let's Encrypt chez la plupart des hébergeurs) : c'est elle que l'on saisit
 dans les applications.
