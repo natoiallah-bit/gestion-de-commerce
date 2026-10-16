@@ -57,10 +57,23 @@ jobs:
       - run: npm run android
       - name: Construire l'APK
         working-directory: application/android
+        env:
+          CLE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
-          cp app/build/outputs/apk/debug/app-debug.apk ../AlgoCommerce.apk
+          if [ -n "$CLE_BASE64" ]; then
+            # APK signé avec la clé fixe d'AlgoCommerce : les mises à jour s'installent par-dessus
+            echo "$CLE_BASE64" | base64 -d > "$RUNNER_TEMP/algocommerce.jks"
+            export ANDROID_KEYSTORE_FILE="$RUNNER_TEMP/algocommerce.jks"
+            ./gradlew assembleRelease --no-daemon
+            cp app/build/outputs/apk/release/app-release.apk ../AlgoCommerce.apk
+            rm -f "$RUNNER_TEMP/algocommerce.jks"
+          else
+            echo "::warning::Secret ANDROID_KEYSTORE_BASE64 absent : APK de test (clé temporaire), les mises à jour demanderont de désinstaller."
+            ./gradlew assembleDebug --no-daemon
+            cp app/build/outputs/apk/debug/app-debug.apk ../AlgoCommerce.apk
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: android

@@ -16,8 +16,24 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // Clé de signature fixe (secrets GitHub) : chaque nouvelle version s'installe
+    // par-dessus l'ancienne sans désinstaller. Sans clé, la version "release" n'est pas signée.
+    def cleSignature = System.getenv("ANDROID_KEYSTORE_FILE")
+    signingConfigs {
+        if (cleSignature) {
+            release {
+                storeFile file(cleSignature)
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ANDROID_KEY_ALIAS") ?: "algocommerce"
+                keyPassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         release {
+            if (cleSignature) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
