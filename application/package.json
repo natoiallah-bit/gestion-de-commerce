@@ -1,7 +1,7 @@
 {
   "name": "gestion-commerce-app",
   "productName": "Gestion Commerce",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "AlgoCommerce : caisse hors ligne synchronisée — Algorithme Service Digital",
   "private": true,
   "type": "module",
