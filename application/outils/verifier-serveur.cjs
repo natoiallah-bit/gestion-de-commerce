@@ -44,4 +44,11 @@ const dossierDonnees = path.join(os.tmpdir(), 'algocommerce-verif-' + Date.now()
   if (r.processus) r.processus.kill();
   console.log('Serveur intégré vérifié.');
   process.exit(0);
-})().catch((e) => { console.error('ECHEC :', e.message); process.exit(1); });
+})().catch((e) => {
+  console.error('ECHEC :', e.message);
+  const fs = require('fs');
+  for (const f of ['demarrage.log', 'serveur.log', 'storage/logs/laravel.log']) {
+    try { console.error(`\n----- ${f} -----\n` + fs.readFileSync(path.join(dossierDonnees, f), 'utf8').slice(-6000)); } catch { /* absent */ }
+  }
+  process.exit(1);
+});
