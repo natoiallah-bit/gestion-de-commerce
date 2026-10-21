@@ -64,7 +64,15 @@ jobs:
           chmod +x gradlew
           if [ -n "$CLE_BASE64" ]; then
             # APK signé avec la clé fixe d'AlgoCommerce : les mises à jour s'installent par-dessus
-            echo "$CLE_BASE64" | base64 -d > "$RUNNER_TEMP/algocommerce.jks"
+            # Le secret peut avoir été collé avec des espaces ou des retours à la ligne : on les retire
+            if ! printf '%s' "$CLE_BASE64" | tr -d ' \r\n\t' | base64 -d > "$RUNNER_TEMP/algocommerce.jks" 2>/dev/null; then
+              echo "::error::Le secret ANDROID_KEYSTORE_BASE64 est incomplet ou abîmé : recollez la longue ligne du fichier AlgoCommerce-cle-signature.txt, en entier."
+              exit 1
+            fi
+            if ! keytool -list -keystore "$RUNNER_TEMP/algocommerce.jks" -storepass "$ANDROID_KEYSTORE_PASSWORD" > /dev/null 2>&1; then
+              echo "::error::La clé de signature ne s'ouvre pas : vérifiez le secret ANDROID_KEYSTORE_PASSWORD (mot de passe du fichier AlgoCommerce-cle-signature.txt) et que ANDROID_KEYSTORE_BASE64 est complet."
+              exit 1
+            fi
             export ANDROID_KEYSTORE_FILE="$RUNNER_TEMP/algocommerce.jks"
             ./gradlew assembleRelease --no-daemon
             cp app/build/outputs/apk/release/app-release.apk ../AlgoCommerce.apk
