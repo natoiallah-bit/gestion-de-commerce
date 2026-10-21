@@ -102,6 +102,49 @@ jobs:
           cache-dependency-path: application/package-lock.json
       - run: npm ci
       - run: npm run exe
+
+      # --- AlgoCommerce Serveur : installateur tout compris (PHP portable + AlgoCommerce)
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_sqlite, sqlite3, mbstring, openssl, fileinfo, curl
+          coverage: none
+          tools: composer
+      - name: Préparer le serveur intégré
+        shell: pwsh
+        working-directory: .
+        run: |
+          $ErrorActionPreference = 'Stop'
+          composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
+          $dest = "application/build-serveur"
+          New-Item -ItemType Directory -Force "$dest/laravel", "$dest/php" | Out-Null
+          foreach ($e in 'app','bootstrap','config','database','lang','public','resources','routes','vendor','artisan','composer.json') {
+            Copy-Item $e "$dest/laravel/" -Recurse -Force
+          }
+          Remove-Item "$dest/laravel/bootstrap/cache/*.php" -ErrorAction SilentlyContinue
+          Remove-Item "$dest/laravel/database/database.sqlite" -ErrorAction SilentlyContinue
+          $phpDir = Split-Path (Get-Command php).Source
+          Copy-Item "$phpDir/*" "$dest/php/" -Recurse -Force
+          # Bibliothèques Visual C++ nécessaires à PHP, pour les PC où elles manquent
+          foreach ($dll in 'vcruntime140.dll','vcruntime140_1.dll','msvcp140.dll') {
+            if (Test-Path "C:\Windows\System32\$dll") { Copy-Item "C:\Windows\System32\$dll" "$dest/php/" -Force }
+          }
+          @(
+            'extension=curl', 'extension=fileinfo', 'extension=mbstring', 'extension=openssl',
+            'extension=pdo_sqlite', 'extension=sqlite3',
+            'memory_limit=256M', 'max_execution_time=120', 'upload_max_filesize=8M', 'post_max_size=16M',
+            'date.timezone=Africa/Ndjamena', 'display_errors=Off', 'log_errors=On'
+          ) | Set-Content "$dest/php/php.ini" -Encoding ascii
+          $ext = (Resolve-Path "$dest/php/ext").Path
+          $modules = & "$dest/php/php.exe" -c "$dest/php/php.ini" -d "extension_dir=$ext" -m
+          foreach ($m in 'pdo_sqlite','sqlite3','mbstring','openssl','fileinfo','curl') {
+            if (-not ($modules -contains $m)) { throw "Extension PHP manquante dans le PHP portable : $m" }
+          }
+      - name: Vérifier le serveur intégré sous Windows
+        run: node outils/verifier-serveur.cjs
+      - name: Construire AlgoCommerce Serveur
+        run: npx electron-builder --config electron-builder-serveur.json --win nsis --x64 --publish never
+
       - uses: actions/upload-artifact@v4
         with:
           name: windows
@@ -129,6 +172,11 @@ jobs:
             **Téléphone Android** : téléchargez `AlgoCommerce.apk` sur le téléphone et ouvrez-le
             (autorisez « installer des applications inconnues » si Android le demande).
 
-            **Ordinateur Windows** : téléchargez `AlgoCommerce-Installation-….exe` et lancez-le.
+            **Ordinateur principal de la boutique** : téléchargez `AlgoCommerce-Serveur-Installation-….exe`
+            et installez-le. Tout est compris (rien d'autre à installer) ; 15 jours d'essai.
+            Compte de départ : gerant@boutique.local / changer-ce-mot-de-passe (à changer ensuite).
 
-            Au premier lancement, indiquez l'adresse de votre serveur, votre e-mail et votre mot de passe.
+            **Téléphones Android** : installez `AlgoCommerce.apk`, puis indiquez l'adresse affichée
+            dans AlgoCommerce Serveur (menu Appareils), votre e-mail et votre mot de passe.
+
+            **Autres ordinateurs de caisse (facultatif)** : `AlgoCommerce-Installation-….exe`.

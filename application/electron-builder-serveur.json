@@ -1,0 +1,21 @@
+{
+  "appId": "com.algocommerce.serveur",
+  "productName": "AlgoCommerce Serveur",
+  "extraMetadata": { "main": "electron/serveur.cjs", "name": "algocommerce-serveur" },
+  "directories": { "output": "dist-electron" },
+  "files": ["electron/**/*", "public/icone.png", "package.json"],
+  "extraResources": [
+    { "from": "build-serveur/laravel", "to": "laravel" },
+    { "from": "build-serveur/php", "to": "php" }
+  ],
+  "win": { "target": "nsis", "icon": "public/icone.png" },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "AlgoCommerce Serveur",
+    "artifactName": "AlgoCommerce-Serveur-Installation-${version}.${ext}"
+  }
+}
