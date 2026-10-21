@@ -27,6 +27,10 @@ $app = Application::configure(basePath: dirname(__DIR__))
 // les données (base, journaux, fichiers temporaires) vont dans le dossier de l'utilisateur.
 if ($donnees = getenv('ALGO_DONNEES')) {
     $app->useStoragePath($donnees.DIRECTORY_SEPARATOR.'storage');
+    // Chemins Windows (C:\...) : Laravel ne les reconnaît pas comme absolus sans cela
+    if (preg_match('/^[A-Za-z]:/', $donnees, $lecteur)) {
+        $app->addAbsoluteCachePathPrefix($lecteur[0]);
+    }
 }
 
 return $app;
