@@ -31,6 +31,7 @@ Composer est téléchargé tout seul s'il n'est pas installé.
    **Laisser cette fenêtre ouverte** pendant que la boutique travaille.
 4. Au premier lancement, Windows demande d'autoriser PHP : cocher **Réseaux privés** et autoriser.
 5. Pour une nouvelle version : **`mettre-a-jour.bat`**, puis `demarrer.bat`.
+6. Mot de passe oublié : **`reinitialiser-mot-de-passe.bat`** (choisir le compte, un nouveau mot de passe s'affiche ; les données ne sont pas touchées).
 
 Le port **8100** est différent de celui de la gestion scolaire (8000) : les deux peuvent tourner en même temps.
 L'adresse est aussi affichée sur le site, menu **Appareils**. Sur Linux / Mac : `./installer.sh` puis `./demarrer.sh`.
