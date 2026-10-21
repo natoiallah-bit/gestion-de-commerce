@@ -1,6 +1,7 @@
 <?php
 
 use App\Support\AdresseReseau;
+use App\Support\Licence;
 use Illuminate\Support\Facades\Artisan;
 
 // Affiche l'adresse à taper dans les applications (téléphone, ordinateur)
@@ -20,5 +21,9 @@ Artisan::command('commerce:adresses {--port=8100}', function () {
     } else {
         $this->warn('  Aucun réseau détecté : connectez cet ordinateur au Wi-Fi de la boutique.');
     }
+    $this->newLine();
+    $licence = Licence::statut();
+    $this->line('  Licence : '.$licence['message']);
+    $this->line('  Code de cet ordinateur : '.Licence::codeMachine());
     $this->newLine();
 })->purpose("Affiche l'adresse du serveur pour les applications");

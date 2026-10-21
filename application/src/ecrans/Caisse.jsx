@@ -12,6 +12,8 @@ export function Caisse({ client }) {
   const { session, naviguer } = useApp();
   const produits = useRequete(() => produitsAvecStock(), [], []);
   const clients = useRequete(() => db.clients.orderBy('nom').toArray(), [], []);
+  const licence = useRequete(async () => (await db.reglages.get('licence'))?.valeur ?? null, [], null);
+  const bloquee = licence && licence.ventes_autorisees === false;
   const [panier, setPanierEtat] = useState(memoire.panier); // [{produit_uuid, quantite}]
   const setPanier = (f) => setPanierEtat((actuel) => (memoire.panier = typeof f === 'function' ? f(actuel) : f));
   const [recherche, setRecherche] = useState('');
@@ -73,6 +75,8 @@ export function Caisse({ client }) {
     <div class="caisse">
       <section>
         <h1 style="margin-bottom:10px">Caisse</h1>
+        {bloquee && <div class="alerte alerte-erreur"><b>{licence.message}</b> Les nouvelles ventes sont bloquées. {licence.contact}</div>}
+        {licence?.etat === 'essai' && licence.jours_restants <= 5 && <div class="alerte alerte-info">{licence.message} {licence.contact}</div>}
         <input type="search" placeholder="Rechercher ou scanner un code-barres puis Entrée…" value={recherche}
                onInput={(e) => setRecherche(e.target.value)} onKeyDown={surEntree} />
         <div class="catalogue">
@@ -133,7 +137,7 @@ export function Caisse({ client }) {
         <div class="resume"><span>Monnaie à rendre</span><b>{fcfa(Math.max(montantRecu - total, 0))}</b></div>
         <div class="resume"><span>Reste à crédit</span><b class="negatif">{fcfa(Math.max(total - montantRecu, 0))}</b></div>
 
-        <button class="btn btn-ambre btn-large" style="margin-top:12px" disabled={!lignes.length || envoi} onClick={valider}>Valider la vente</button>
+        <button class="btn btn-ambre btn-large" style="margin-top:12px" disabled={!lignes.length || envoi || bloquee} onClick={valider}>Valider la vente</button>
       </div>
 
       {lignes.length > 0 && (

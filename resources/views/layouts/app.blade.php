@@ -70,6 +70,7 @@
         .badge-gris{ background:#ecebe6; color:var(--doux); }
 
         .alerte{ padding:11px 14px; border-radius:7px; margin-bottom:16px; }
+        .alerte-info{ background:var(--ambre-100); color:#6b4606; }
         .alerte-succes{ background:var(--vert-100); color:var(--vert-800); }
         .alerte-erreur{ background:var(--rouge-100); color:var(--rouge-600); }
         .alerte-erreur ul{ margin-left:18px; }
@@ -160,6 +161,15 @@
     </nav>
 
     <main>
+        @php $licenceStatut = \App\Support\Licence::statut(); @endphp
+        @if($licenceStatut['etat'] !== 'valide')
+            <div class="alerte {{ $licenceStatut['ventes_autorisees'] ? 'alerte-info' : 'alerte-erreur' }}">
+                <b>{{ $licenceStatut['message'] }}</b>
+                @unless($licenceStatut['ventes_autorisees']) Les nouvelles ventes sont bloquées ; vos données restent consultables. @endunless
+                Pour activer AlgoCommerce : {{ $licenceStatut['contact'] }}
+                @if($u->estGerant()) — <a href="{{ route('parametres.edit') }}#cle">saisir la clé de licence</a>@endif
+            </div>
+        @endif
         @if(session('succes'))
             <div class="alerte alerte-succes">{{ session('succes') }}</div>
         @endif

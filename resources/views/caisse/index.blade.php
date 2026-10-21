@@ -102,6 +102,7 @@
 @endphp
 <script>
 (function () {
+    const ventesBloquees = @json(! \App\Support\Licence::statut()['ventes_autorisees']);
     const produits = @json($catalogue);
     const panier = new Map(); // id -> quantité
     // Après une erreur, on retrouve le panier tel qu'il était
@@ -157,7 +158,7 @@
         let nb = 0; panier.forEach(q => nb += q);
         $('barre-nb').textContent = nb ? 'Voir le panier (' + nb + ' article' + (nb > 1 ? 's' : '') + ')' : 'Panier vide';
         if (!recuModifie) $('recu').value = t;
-        $('btn-valider').disabled = panier.size === 0;
+        $('btn-valider').disabled = panier.size === 0 || ventesBloquees;
         calculer();
     }
 

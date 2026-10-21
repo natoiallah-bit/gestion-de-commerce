@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Appareil;
 use App\Models\User;
+use App\Support\Licence;
 use App\Support\Synchronisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +26,15 @@ class ApiController extends Controller
         $user = User::where('email', $donnees['email'])->first();
         if (! $user || ! $user->actif || ! Hash::check($donnees['password'], $user->password)) {
             throw ValidationException::withMessages(['email' => 'Identifiants incorrects ou compte désactivé.']);
+        }
+
+        // Nombre d'appareils limité par la licence (un appareil déjà connu peut toujours revenir)
+        $licence = Licence::statut();
+        if (Appareil::nombreConnectes($donnees['appareil_uuid']) >= $licence['appareils_max']) {
+            return response()->json([
+                'message' => "Nombre maximum d'appareils atteint ({$licence['appareils_max']}). "
+                    .'Déconnectez un appareil dans le menu Appareils du site, ou ajoutez des téléphones à votre licence : '.$licence['contact'],
+            ], 403);
         }
 
         $appareil = Appareil::enregistrer($donnees['appareil_uuid'], $donnees['appareil_nom'], $user);
@@ -74,6 +84,20 @@ class ApiController extends Controller
         return response()->json($envoi + $reception + [
             'utilisateur' => ['uuid' => $user->uuid, 'nom' => $user->name, 'role' => $user->role],
             'heure_serveur' => now()->toIso8601String(),
+            'licence' => self::licencePourAppareil(),
         ]);
+    }
+
+    private static function licencePourAppareil(): array
+    {
+        $licence = Licence::statut();
+
+        return [
+            'etat' => $licence['etat'],
+            'message' => $licence['message'],
+            'ventes_autorisees' => $licence['ventes_autorisees'],
+            'jours_restants' => $licence['jours_restants'],
+            'contact' => $licence['contact'],
+        ];
     }
 }

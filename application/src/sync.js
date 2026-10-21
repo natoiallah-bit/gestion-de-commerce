@@ -70,6 +70,8 @@ async function executer() {
     } while (reponse.encore);
 
     if (reponse.utilisateur) await ecrire('utilisateur', { ...session.utilisateur, ...reponse.utilisateur });
+    // Licence de la boutique : bloque la caisse si l'essai est terminé ou la licence invalide
+    if (reponse.licence) await ecrire('licence', reponse.licence);
     await ecrire('derniere_synchro', new Date().toISOString());
     changerEtat({ enCours: false, horsLigne: false });
     return reponse;

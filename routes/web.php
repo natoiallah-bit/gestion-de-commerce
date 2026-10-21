@@ -62,5 +62,6 @@ Route::middleware(['auth', 'actif'])->group(function () {
         Route::post('/appareils/{appareil}/revoquer', [AppareilController::class, 'revoquer'])->name('appareils.revoquer');
         Route::get('/parametres', [ParametreController::class, 'edit'])->name('parametres.edit');
         Route::put('/parametres', [ParametreController::class, 'update'])->name('parametres.update');
+        Route::put('/parametres/licence', [ParametreController::class, 'licence'])->name('parametres.licence');
     });
 });

@@ -16,6 +16,7 @@ export function Synchro() {
     envois: await db.envois.orderBy('id').toArray(),
     rejets: await db.rejets.orderBy('id').reverse().toArray(),
     derniere: (await db.reglages.get('derniere_synchro'))?.valeur,
+    licence: (await db.reglages.get('licence'))?.valeur,
   }), [], null);
   if (!donnees) return null;
 
@@ -62,6 +63,7 @@ export function Synchro() {
         <p>Serveur : <b>{session.serveur}</b></p>
         <p>Connecté : <b>{session.utilisateur.nom}</b> ({session.utilisateur.role === 'gerant' ? 'Gérant' : 'Vendeur'})</p>
         <p>Appareil : <b>{session.appareil.nom}</b> — code <b>{session.appareil.code}</b> (préfixe des tickets)</p>
+        {donnees.licence && <p>Licence : <b>{donnees.licence.message}</b></p>}
         <button class="btn btn-leger" style="margin-top:10px" onClick={deconnecter}>Se déconnecter</button>
       </div>
     </>

@@ -36,6 +36,10 @@ export async function produitsAvecStock({ inactifs = false } = {}) {
 }
 
 export async function enregistrerVente({ lignes, clientUuid, montantPaye, mode, session }) {
+  const licence = await lire('licence');
+  if (licence && licence.ventes_autorisees === false) {
+    throw new Error(`${licence.message} Nouvelles ventes impossibles. ${licence.contact || ''}`);
+  }
   const produits = await db.produits.bulkGet(lignes.map((l) => l.produit_uuid));
   const lignesVente = lignes.map((l, i) => {
     const p = produits[i];

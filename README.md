@@ -134,6 +134,17 @@ php artisan db:seed --class=DemoSeeder
 
 (ajoute aussi un compte `vendeur@boutique.local` / `vendeur1234`).
 
+## Licence
+
+- Sans licence : **15 jours d'essai** (3 appareils). Ensuite, les nouvelles ventes sont bloquées ;
+  les données restent consultables et les ventes faites hors ligne sur les téléphones sont toujours reçues.
+- Le client donne le **code de son ordinateur** (Paramètres → Licence). Algorithme Service Digital
+  crée la clé avec **`generer-licence.bat`** et le client la colle dans Paramètres → Licence.
+- La clé est signée (ECDSA) : impossible de la modifier ou d'en fabriquer une sans la clé privée d'ASD,
+  qui reste dans `Documents\AlgoCommerce-licences\` sur l'ordinateur d'ASD, **jamais dans le projet**.
+- Une licence fixe le nom de la boutique, le nombre de téléphones/ordinateurs et l'ordinateur autorisé ;
+  elle est « à vie » sauf si une durée en mois est indiquée.
+
 ## Tests
 
 ```bash

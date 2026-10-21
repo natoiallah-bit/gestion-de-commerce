@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Produit;
 use App\Models\Vente;
+use App\Support\Licence;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -20,6 +21,11 @@ class CaisseController extends Controller
 
     public function store(Request $request)
     {
+        $licence = Licence::statut();
+        if (! $licence['ventes_autorisees']) {
+            return back()->withErrors(['licence' => $licence['message'].' Nouvelles ventes impossibles. '.$licence['contact']]);
+        }
+
         $donnees = $request->validate([
             'lignes' => 'required|array|min:1',
             'lignes.*.produit_id' => 'required|integer|exists:produits,id',

@@ -93,3 +93,13 @@ describe('synchronisation', () => {
     expect((await db.rejets.toArray())[0].raison).toMatch(/inconnu/);
   });
 });
+
+describe('licence', () => {
+  it('bloque les nouvelles ventes quand le serveur indique que la licence ne le permet pas', async () => {
+    await db.reglages.put({ cle: 'licence', valeur: { etat: 'essai_termine', message: "La période d'essai est terminée.", ventes_autorisees: false, contact: 'ASD' } });
+    await expect(enregistrerVente({ lignes: [{ produit_uuid: 'p-riz', quantite: 1 }], montantPaye: 500, mode: 'especes', session }))
+      .rejects.toThrow(/essai est terminée/);
+    expect(await db.ventes.count()).toBe(0);
+    await db.reglages.delete('licence');
+  });
+});
