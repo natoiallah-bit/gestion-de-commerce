@@ -9,7 +9,7 @@ on:
   push:
     branches: [main]
     tags: ['v*']
-    paths: ['application/**', '.github/workflows/applications.yml']
+    paths: ['application/**', 'app/**', 'bootstrap/**', 'config/**', 'database/**', 'lang/**', 'public/**', 'resources/**', 'routes/**', 'composer.lock', '.github/workflows/applications.yml']
   workflow_dispatch:
 
 permissions:
